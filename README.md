@@ -16,3 +16,11 @@ Operator-grade proof projects: automation + reliability + security-minded workfl
 - Access Review Helper
 - Audit Evidence Collector
 - Incident Postmortem Generator
+
+## Deliverable #1: Access Review Helper v0 (in progress)
+**Input:** access list (CSV/JSON)  
+**Output:** report that flags privileged roles, stale access, disabled-but-privileged, and duplicates.
+
+Docs:
+- Spec: /docs/spec.md
+- Sample output: /docs/sample_report.txt
