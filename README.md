@@ -1,5 +1,7 @@
 # Black Tower (v0)
 
+Status: Deliverable #1 spec + sample output shipped (docs)
+
 Operator-grade proof projects: automation + reliability + security-minded workflows.
 
 ## What this demonstrates
