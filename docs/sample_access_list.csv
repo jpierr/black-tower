@@ -1,0 +1,9 @@
+user,role,last_login,status,department
+alice@example.com,Admin,2025-12-20,active,IT
+bob@example.com,User,2025-06-01,active,Sales
+cara@example.com,Owner,,disabled,Finance
+dan@example.com,User,2025-10-01,active,Ops
+eva@example.com,Root,2025-01-10,active,Engineering
+frank@example.com,User,,active,Support
+grace@example.com,User,2025-12-01,active,Support
+grace@example.com,User,2025-12-01,active,Support
