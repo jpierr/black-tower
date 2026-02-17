@@ -1,0 +1,26 @@
+Access Review Helper v0 — Report
+
+SUMMARY
+- Total users reviewed: 8
+- Privileged users: 3
+- Stale access (missing or >90d): 5
+- Disabled but privileged: 1
+- Duplicate users detected: 1
+
+PRIVILEGED USERS
+- alice@example.com | role=Admin | last_login=2025-12-20 | status=active
+- cara@example.com | role=Owner | last_login= | status=disabled
+- eva@example.com | role=Root | last_login=2025-01-10 | status=active
+
+STALE ACCESS
+- bob@example.com | role=User | last_login=2025-06-01 | status=active
+- cara@example.com | role=Owner | last_login= | status=disabled
+- dan@example.com | role=User | last_login=2025-10-01 | status=active
+- eva@example.com | role=Root | last_login=2025-01-10 | status=active
+- frank@example.com | role=User | last_login= | status=active
+
+DISABLED BUT PRIVILEGED
+- cara@example.com | role=Owner | last_login= | status=disabled
+
+DUPLICATES
+- grace@example.com
