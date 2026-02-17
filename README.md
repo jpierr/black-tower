@@ -49,3 +49,88 @@ Output:
 Docs:
 - Spec: docs/spec.md
 - Sample output: docs/sample_report.txt
+
+# Black Tower (v0)
+
+Status: Deliverable #1 shipped — Access Review Helper (demo-ready)
+
+Operator-grade proof projects focused on automation, reliability, and security-minded workflows.
+
+---
+
+## Mission
+Black Tower is a portfolio of operator-focused tools that simulate real-world IT and security workflows.
+
+The goal is to demonstrate:
+- Systems thinking
+- Practical automation
+- Security awareness
+- Clear documentation and repeatability
+- Production-style workflow discipline
+
+---
+
+## Deliverable #1 — Access Review Helper
+
+A lightweight CLI tool that simulates an internal access review process.
+
+### Real-World Use Case
+This type of review is commonly required for:
+- SOC 2 audits
+- ISO 27001 compliance
+- Quarterly privileged access reviews
+- Internal governance and risk management
+
+### What It Detects
+- Privileged roles (Admin, Owner, Root)
+- Stale access (>90 days or missing login)
+- Disabled but still privileged accounts
+- Duplicate user records
+
+---
+
+## Quickstart
+
+From the project root directory:
+
+```bash
+python3 docs/access_review_helper.py docs/sample_access_list.csv
+```
+
+### Output
+- Prints a structured report to the terminal
+- Writes `docs/access_review_report.txt`
+
+---
+
+## Project Structure
+
+```
+black-tower/
+├── docs/
+│   ├── access_review_helper.py
+│   ├── sample_access_list.csv
+│   ├── sample_report.txt
+│   ├── access_review_report.txt
+│   └── spec.md
+└── README.md
+```
+
+---
+
+## Current Sprint
+- Improve CLI usability (argument handling / flags)
+- Add JSON input support
+- Improve reporting format
+- Add basic error handling
+
+---
+
+## Roadmap
+- Access Review Helper (v1 CLI upgrade)
+- Audit Evidence Collector
+- Incident Postmortem Generator
+
+---
+
+Built as operator-grade proof of execution.
