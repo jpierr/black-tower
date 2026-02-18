@@ -4,6 +4,14 @@ import sys
 import argparse
 from datetime import datetime, timedelta
 
+VERSION = "0.1.0"
+
+# Exit codes:
+# 0 = clean run
+# 2 = disabled privileged accounts detected
+
+
+
 PRIV_KEYWORDS = ("admin", "owner", "root", "superuser")
 
 
