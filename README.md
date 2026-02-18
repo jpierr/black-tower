@@ -51,8 +51,8 @@ python3 access_review_helper.py docs/sample_access_list.csv
 
 ```
 black-tower/
+├── access_review_helper.py
 ├── docs/
-│   ├── access_review_helper.py
 │   ├── sample_access_list.csv
 │   ├── sample_report.txt
 │   ├── access_review_report.txt
