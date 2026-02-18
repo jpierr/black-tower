@@ -1,9 +1,23 @@
 #!/usr/bin/env python3
 import csv
 import sys
+import argparse
 from datetime import datetime, timedelta
 
 PRIV_KEYWORDS = ("admin", "owner", "root", "superuser")
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Access Review Helper - Audit privileged and stale access"
+    )
+    parser.add_argument("input_file", help="Path to CSV access list")
+    parser.add_argument(
+        "--output",
+        default="access_review_report.txt",
+        help="Output report file path",
+    )
+    return parser.parse_args()
 
 
 def parse_date(date_str: str):
@@ -21,11 +35,10 @@ def is_privileged(role: str) -> bool:
 
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python access_review_helper.py <input.csv>")
-        sys.exit(1)
+    args = parse_args()
+    path = args.input_file
+    output_path = args.output
 
-    path = sys.argv[1]
     rows = []
     seen_users = set()
     duplicate_users = set()
@@ -98,8 +111,12 @@ def main():
     print(output)
 
     # also write report file
-    with open("access_review_report.txt", "w", encoding="utf-8") as out:
+    with open(output_path, "w", encoding="utf-8") as out:
         out.write(output)
+
+    # exit non-zero if disabled users retain privileged access
+    if len(disabled_privileged) > 0:
+        sys.exit(2)
 
 
 if __name__ == "__main__":
