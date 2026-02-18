@@ -38,7 +38,7 @@ Commonly required for:
 From the project root directory:
 
 ```bash
-python3 docs/access_review_helper.py docs/sample_access_list.csv
+python3 access_review_helper.py docs/sample_access_list.csv
 ```
 
 ### Output
