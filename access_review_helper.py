@@ -57,14 +57,33 @@ def main():
     seen_users = set()
     duplicate_users = set()
 
-    with open(path, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            user = (row.get("user") or "").strip()
-            if user in seen_users:
-                duplicate_users.add(user)
-            seen_users.add(user)
-            rows.append(row)
+    try:
+        with open(path, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            required = {"user", "role", "last_login", "status"}
+            headers = set(h.strip() for h in (reader.fieldnames or []))
+
+            if not headers:
+                print("Error: CSV appears empty or missing header row.")
+                sys.exit(1)
+
+            missing = required - headers
+            if missing:
+                print(f"Error: CSV missing required columns: {', '.join(sorted(missing))}")
+                sys.exit(1)
+
+            for row in reader:
+                user = (row.get("user") or "").strip()
+                if user in seen_users:
+                    duplicate_users.add(user)
+                seen_users.add(user)
+                rows.append(row)
+            if not rows:
+                print("Error: CSV has no data rows.")
+                sys.exit(1)
+    except Exception as e:
+        print(f"Error reading file: {e}")
+        sys.exit(1)
 
     today = datetime.today()
     stale_cutoff = today - timedelta(days=90)
