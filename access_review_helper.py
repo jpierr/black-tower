@@ -3,6 +3,7 @@ import csv
 import sys
 import argparse
 from datetime import datetime, timedelta
+import os
 
 VERSION = "0.1.0"
 
@@ -46,6 +47,11 @@ def main():
     args = parse_args()
     path = args.input_file
     output_path = args.output
+
+    # Basic file validation
+    if not os.path.exists(path):
+        print(f"Error: File '{path}' not found.")
+        sys.exit(1)
 
     rows = []
     seen_users = set()
