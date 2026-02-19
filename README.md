@@ -39,6 +39,9 @@ From the project root directory:
 
 ```bash
 python3 access_review_helper.py docs/sample_access_list.csv
+
+# optional: write report somewhere else
+python3 access_review_helper.py docs/sample_access_list.csv --output docs/access_review_report.txt
 ```
 
 ### Output

@@ -23,7 +23,7 @@ def parse_args():
     parser.add_argument("input_file", help="Path to CSV access list")
     parser.add_argument(
         "--output",
-        default="access_review_report.txt",
+        default="docs/access_review_report.txt",
         help="Output report file path",
     )
     return parser.parse_args()
@@ -144,6 +144,10 @@ def main():
     print(output)
 
     # also write report file
+    # ensure output directory exists (if a directory was provided)
+    out_dir = os.path.dirname(output_path)
+    if out_dir:
+        os.makedirs(out_dir, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as out:
         out.write(output)
 
