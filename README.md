@@ -64,20 +64,29 @@ Commonly required for:
 From the project root directory:
 
 ```bash
+# install as a local CLI (editable)
+python3 -m pip install -e .
+
+# run via installed command
+black-tower docs/sample_access_list.csv
+```
+
+Or run the script directly:
+```bash
 # default text output
-python3 access_review_helper.py docs/sample_access_list.csv
+black-tower docs/sample_access_list.csv
 
 # configurable stale threshold
-python3 access_review_helper.py docs/sample_access_list.csv --days 45
+black-tower docs/sample_access_list.csv --days 45
 
 # JSON output to terminal
-python3 access_review_helper.py docs/sample_access_list.csv --format json
+black-tower docs/sample_access_list.csv --format json
 
 # JSON output to file
-python3 access_review_helper.py docs/sample_access_list.csv --format json --output docs/report.json
+black-tower docs/sample_access_list.csv --format json --output docs/report.json
 
 # strict mode (fail if ANY findings are detected)
-python3 access_review_helper.py docs/sample_access_list.csv --strict
+black-tower docs/sample_access_list.csv --strict
 echo $?
 ```
 
