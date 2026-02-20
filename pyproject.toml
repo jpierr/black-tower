@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "black-tower"
+version = "0.1.0"
+description = "Operator-grade proof projects: Access Review Helper CLI"
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Jean-Pierre Pesantes" }]
+dependencies = []
+
+[project.scripts]
+black-tower = "access_review_helper:main"
