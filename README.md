@@ -1,5 +1,7 @@
 # Black Tower (v0)
 
+![tests](https://github.com/jpierr/black-tower/actions/workflows/tests.yml/badge.svg)
+
 Operator-grade proof projects focused on automation, reliability, and security-minded workflows.
 
 ---
@@ -63,6 +65,18 @@ python3 access_review_helper.py docs/sample_access_list.csv --format json --outp
 
 Exit codes allow integration with automation pipelines and CI workflows.
 
+---
+
+## Tests + CI
+
+Run the test suite locally:
+
+```bash
+pytest -q
+```
+
+CI:
+- GitHub Actions runs `pytest` on every push and pull request.
 ---
 
 ## Project Structure
