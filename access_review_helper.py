@@ -4,6 +4,7 @@ import sys
 import argparse
 from datetime import datetime, timedelta
 import os
+import json
 
 VERSION = "0.1.0"
 
@@ -47,6 +48,13 @@ def parse_args():
         "--output",
         default="docs/access_review_report.txt",
         help="Output report file path",
+    )
+
+    parser.add_argument(
+        "--format",
+        choices=["text", "json"],
+        default="text",
+        help="Output format (text or json). Default: text",
     )
 
     args = parser.parse_args()
@@ -172,16 +180,34 @@ def main():
             report_lines.append(f"- {u}")
         report_lines.append("")
 
-    output = "\n".join(report_lines).strip() + "\n"
-    print(output)
-
-    # also write report file
-    # ensure output directory exists (if a directory was provided)
-    out_dir = os.path.dirname(output_path)
-    if out_dir:
-        os.makedirs(out_dir, exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as out:
-        out.write(output)
+    if args.format == "json":
+        json_output = {
+            "summary": {
+                "total_users": len(rows),
+                "privileged": len(privileged),
+                "stale": len(stale),
+                "disabled_privileged": len(disabled_privileged),
+                "duplicates": len(duplicate_users),
+            },
+            "privileged_users": privileged,
+            "stale_users": stale,
+            "disabled_privileged_users": disabled_privileged,
+            "duplicates": sorted(list(duplicate_users)),
+        }
+        print(json.dumps(json_output, indent=2))
+        out_dir = os.path.dirname(output_path)
+        if out_dir:
+            os.makedirs(out_dir, exist_ok=True)
+        with open(output_path, "w", encoding="utf-8") as out:
+            json.dump(json_output, out, indent=2)
+    else:
+        output = "\n".join(report_lines).strip() + "\n"
+        print(output)
+        out_dir = os.path.dirname(output_path)
+        if out_dir:
+            os.makedirs(out_dir, exist_ok=True)
+        with open(output_path, "w", encoding="utf-8") as out:
+            out.write(output)
 
     # exit non-zero if disabled users retain privileged access
     if len(disabled_privileged) > 0:
