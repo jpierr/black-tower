@@ -6,6 +6,23 @@ Operator-grade proof projects focused on automation, reliability, and security-m
 
 ---
 
+## Requirements
+- Python 3.9+
+
+## Input format
+### CSV
+Required columns:
+- `user`
+- `role`
+- `last_login` (YYYY-MM-DD or blank)
+- `status` (e.g., `active`, `disabled`)
+
+### JSON
+A JSON file containing a list of objects with the same required keys as CSV.
+(Extra keys are allowed.)
+
+---
+
 ## Mission
 Black Tower simulates real-world IT and security workflows to demonstrate:
 - Systems thinking
@@ -79,6 +96,8 @@ Run the test suite locally:
 ```bash
 pytest -q
 ```
+
+Note: core logic is exposed via `analyze_access(rows, days=90, today=None)` and tests inject a fixed `today` for deterministic stale-access behavior.
 
 CI:
 - GitHub Actions runs `pytest` on every push and pull request.
