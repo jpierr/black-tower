@@ -16,7 +16,69 @@ VERSION = "0.1.0"
 
 
 
+
 PRIV_KEYWORDS = ("admin", "owner", "root", "superuser")
+
+
+# Pure logic function for testability
+def analyze_access(rows, days=90, today=None):
+    """Analyze access rows and return findings.
+
+    rows: list[dict] with required keys: user, role, last_login, status
+    days: stale threshold in days
+    today: datetime override for deterministic tests (optional)
+    """
+    if today is None:
+        today = datetime.today()
+
+    stale_cutoff = today - timedelta(days=days)
+
+    privileged = []
+    stale = []
+    disabled_privileged = []
+
+    seen_users = set()
+    duplicate_users = set()
+
+    for row in rows:
+        user = (row.get("user") or "").strip()
+        role = (row.get("role") or "").strip()
+        last_login_str = (row.get("last_login") or "").strip()
+        status = (row.get("status") or "").strip().lower()
+
+        if user:
+            if user in seen_users:
+                duplicate_users.add(user)
+            seen_users.add(user)
+
+        priv = is_privileged(role)
+        last_login_dt = parse_date(last_login_str)
+
+        if priv:
+            privileged.append(row)
+
+        # stale = missing login OR older than threshold (if parseable)
+        if not last_login_dt or last_login_dt < stale_cutoff:
+            stale.append(row)
+
+        if status == "disabled" and priv:
+            disabled_privileged.append(row)
+
+    findings = {
+        "summary": {
+            "total_users": len(rows),
+            "privileged": len(privileged),
+            "stale": len(stale),
+            "disabled_privileged": len(disabled_privileged),
+            "duplicates": len(duplicate_users),
+        },
+        "privileged_users": privileged,
+        "stale_users": stale,
+        "disabled_privileged_users": disabled_privileged,
+        "duplicates": sorted(list(duplicate_users)),
+    }
+
+    return findings
 
 
 def parse_args():
@@ -133,31 +195,11 @@ def main():
         print(f"Error reading file: {e}")
         sys.exit(1)
 
-    today = datetime.today()
-    stale_cutoff = today - timedelta(days=args.days)
-
-    privileged = []
-    stale = []
-    disabled_privileged = []
-
-    for row in rows:
-        user = (row.get("user") or "").strip()
-        role = (row.get("role") or "").strip()
-        last_login_str = (row.get("last_login") or "").strip()
-        status = (row.get("status") or "").strip().lower()
-
-        priv = is_privileged(role)
-        last_login_dt = parse_date(last_login_str)
-
-        if priv:
-            privileged.append(row)
-
-        # stale = missing login OR older than 90 days (if parseable)
-        if not last_login_dt or last_login_dt < stale_cutoff:
-            stale.append(row)
-
-        if status == "disabled" and priv:
-            disabled_privileged.append(row)
+    findings = analyze_access(rows, days=args.days)
+    privileged = findings["privileged_users"]
+    stale = findings["stale_users"]
+    disabled_privileged = findings["disabled_privileged_users"]
+    duplicate_users = set(findings["duplicates"])
 
     report_lines = []
     report_lines.append("Access Review Helper v0 — Report")
@@ -189,19 +231,7 @@ def main():
         report_lines.append("")
 
     if args.format == "json":
-        json_output = {
-            "summary": {
-                "total_users": len(rows),
-                "privileged": len(privileged),
-                "stale": len(stale),
-                "disabled_privileged": len(disabled_privileged),
-                "duplicates": len(duplicate_users),
-            },
-            "privileged_users": privileged,
-            "stale_users": stale,
-            "disabled_privileged_users": disabled_privileged,
-            "duplicates": sorted(list(duplicate_users)),
-        }
+        json_output = findings
         print(json.dumps(json_output, indent=2))
         out_dir = os.path.dirname(output_path)
         if out_dir:
