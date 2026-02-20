@@ -67,3 +67,21 @@ def test_analyze_access_deterministic_today_stale_cutoff():
 
     # stale: last_login missing OR older than cutoff
     assert len(result.get("stale_users", [])) == 2
+
+
+def test_stale_cutoff_boundary_equal_not_stale():
+    # Rule: stale if last_login is missing OR last_login < cutoff (strictly older).
+    # If last_login == cutoff, it should NOT be considered stale.
+    fixed_today = datetime(2026, 2, 1)
+
+    # With days=90, cutoff is 2025-11-03.
+    rows = [
+        {"user": "equal@example.com", "role": "User", "last_login": "2025-11-03", "status": "active"},
+        {"user": "older@example.com", "role": "User", "last_login": "2025-11-02", "status": "active"},
+    ]
+
+    result = analyze_access(rows, days=90, today=fixed_today)
+    stale_users = {r.get("user") for r in result.get("stale_users", [])}
+
+    assert "equal@example.com" not in stale_users
+    assert "older@example.com" in stale_users
