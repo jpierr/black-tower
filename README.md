@@ -27,7 +27,7 @@ Commonly required for:
 
 ### Detection Capabilities
 - Privileged role detection (Admin / Owner / Root)
-- Stale access (>90 days or missing login)
+- Stale access (configurable threshold via `--days`, default 90)
 - Disabled but still privileged accounts
 - Duplicate user records
 
@@ -38,15 +38,30 @@ Commonly required for:
 From the project root directory:
 
 ```bash
+# default text output
 python3 access_review_helper.py docs/sample_access_list.csv
 
-# optional: write report somewhere else
-python3 access_review_helper.py docs/sample_access_list.csv --output docs/access_review_report.txt
+# configurable stale threshold
+python3 access_review_helper.py docs/sample_access_list.csv --days 45
+
+# JSON output to terminal
+python3 access_review_helper.py docs/sample_access_list.csv --format json
+
+# JSON output to file
+python3 access_review_helper.py docs/sample_access_list.csv --format json --output docs/report.json
 ```
 
 ### Output
 - Prints a structured report to the terminal
 - Writes `docs/access_review_report.txt`
+
+### Exit Codes
+
+- `0` → No critical findings
+- `1` → Input / validation error
+- `2` → Disabled but privileged accounts detected
+
+Exit codes allow integration with automation pipelines and CI workflows.
 
 ---
 
