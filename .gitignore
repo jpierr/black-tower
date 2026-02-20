@@ -4,3 +4,6 @@ access_review_report.txt
 # Test scratch files
 docs/bad.csv
 docs/bad2.csv
+# generated outputs + scratch
+access_review_report.txt
+docs/bad*.csv
