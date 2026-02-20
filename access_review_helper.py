@@ -10,7 +10,9 @@ VERSION = "0.1.0"
 
 # Exit codes:
 # 0 = clean run
+# 1 = input/validation error
 # 2 = disabled privileged accounts detected
+# 3 = strict mode failure (any findings detected)
 
 
 
@@ -55,6 +57,12 @@ def parse_args():
         choices=["text", "json"],
         default="text",
         help="Output format (text or json). Default: text",
+    )
+
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Fail if any findings are detected",
     )
 
     args = parser.parse_args()
@@ -209,9 +217,19 @@ def main():
         with open(output_path, "w", encoding="utf-8") as out:
             out.write(output)
 
-    # exit non-zero if disabled users retain privileged access
+    # Exit behavior
+    # 2 = disabled users retain privileged access
+    # 3 = strict mode failure (any findings detected)
+    exit_code = 0
+
     if len(disabled_privileged) > 0:
-        sys.exit(2)
+        exit_code = 2
+
+    if args.strict:
+        if privileged or stale or disabled_privileged or duplicate_users:
+            exit_code = 3
+
+    sys.exit(exit_code)
 
 
 if __name__ == "__main__":
