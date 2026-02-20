@@ -1,11 +1,5 @@
-# generated artifacts
-output/
-tmp/
-*.zip
-
-# OS/editor noise
-.DS_Store
-__MACOSX/
-.vscode/
+docs/access_review_report.txt
+docs/report.json
+access_review_report.txt
 *.pyc
 __pycache__/
