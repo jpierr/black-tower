@@ -4,3 +4,4 @@ access_review_report.txt
 *.pyc
 __pycache__/
 docs/sample_access_list.json
+black_tower.egg-info/
