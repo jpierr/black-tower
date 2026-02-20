@@ -51,17 +51,22 @@ python3 access_review_helper.py docs/sample_access_list.csv --format json
 
 # JSON output to file
 python3 access_review_helper.py docs/sample_access_list.csv --format json --output docs/report.json
+
+# strict mode (fail if ANY findings are detected)
+python3 access_review_helper.py docs/sample_access_list.csv --strict
+echo $?
 ```
 
 ### Output
 - Prints a structured report to the terminal
-- Writes `docs/access_review_report.txt`
+- Writes `docs/access_review_report.txt` (default)
 
 ### Exit Codes
 
 - `0` → No critical findings
 - `1` → Input / validation error
 - `2` → Disabled but privileged accounts detected
+- `3` → `--strict` enabled and any findings detected (privileged/stale/disabled/duplicates)
 
 Exit codes allow integration with automation pipelines and CI workflows.
 
@@ -89,6 +94,13 @@ black-tower/
 │   ├── sample_report.txt
 │   ├── access_review_report.txt
 │   └── spec.md
+├── tests/
+│   ├── fixtures/
+│   │   └── clean.csv
+│   └── test_access_review_helper.py
+├── .github/
+│   └── workflows/
+│       └── tests.yml
 └── README.md
 ```
 
