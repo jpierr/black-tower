@@ -1,9 +1,11 @@
-# Generated reports
-access_review_report.txt
+# generated artifacts
+output/
+tmp/
+*.zip
 
-# Test scratch files
-docs/bad.csv
-docs/bad2.csv
-# generated outputs + scratch
-access_review_report.txt
-docs/bad*.csv
+# OS/editor noise
+.DS_Store
+__MACOSX/
+.vscode/
+*.pyc
+__pycache__/
