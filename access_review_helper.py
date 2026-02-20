@@ -20,13 +20,45 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description="Access Review Helper - Audit privileged and stale access"
     )
-    parser.add_argument("input_file", help="Path to CSV access list")
+
+    # Accept either positional input_file OR --input for convenience.
+    # If both are provided, --input wins.
+    parser.add_argument(
+        "input_file",
+        nargs="?",
+        default=None,
+        help="Path to CSV access list (positional)",
+    )
+    parser.add_argument(
+        "--input",
+        dest="input_file_flag",
+        default=None,
+        help="Path to CSV access list (same as positional)",
+    )
+
+    parser.add_argument(
+        "--days",
+        type=int,
+        default=90,
+        help="Stale threshold in days (default: 90)",
+    )
+
     parser.add_argument(
         "--output",
         default="docs/access_review_report.txt",
         help="Output report file path",
     )
-    return parser.parse_args()
+
+    args = parser.parse_args()
+
+    # Resolve final input path
+    final_input = args.input_file_flag or args.input_file
+    if not final_input:
+        parser.error("missing input file. Provide a CSV path or use --input <path>.")
+
+    # Normalize to a single attribute so the rest of the script stays simple
+    args.input_file = final_input
+    return args
 
 
 def parse_date(date_str: str):
@@ -86,7 +118,7 @@ def main():
         sys.exit(1)
 
     today = datetime.today()
-    stale_cutoff = today - timedelta(days=90)
+    stale_cutoff = today - timedelta(days=args.days)
 
     privileged = []
     stale = []
@@ -117,7 +149,7 @@ def main():
     report_lines.append("SUMMARY")
     report_lines.append(f"- Total users reviewed: {len(rows)}")
     report_lines.append(f"- Privileged users: {len(privileged)}")
-    report_lines.append(f"- Stale access (missing or >90d): {len(stale)}")
+    report_lines.append(f"- Stale access (missing or >{args.days}d): {len(stale)}")
     report_lines.append(f"- Disabled but privileged: {len(disabled_privileged)}")
     report_lines.append(f"- Duplicate users detected: {len(duplicate_users)}")
     report_lines.append("")
