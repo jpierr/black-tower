@@ -52,6 +52,13 @@ Commonly required for:
 
 ---
 
+## Behavior Contracts
+
+- **Stale definition:** `last_login` is stale if it is missing/blank **OR** `last_login < (today - days)`.
+- **Boundary rule:** If `last_login == (today - days)`, it is **not** stale.
+
+---
+
 ## Quickstart
 
 From the project root directory:
